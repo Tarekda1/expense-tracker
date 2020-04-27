@@ -2,9 +2,13 @@ const express = require("express");
 const dotenv = require("dotenv");
 const colors = require("colors");
 const morgan = require("morgan");
+const connectDB = require("./config/db");
 
 //configure env files
 dotenv.config({ path: "./config/config.env" });
+
+//connect to mongodb cloud
+connectDB();
 
 const transactions = require("./routes/transactions");
 
