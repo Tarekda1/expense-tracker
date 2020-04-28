@@ -16,6 +16,9 @@ const PORT = process.env.PORT;
 
 const app = express();
 
+//add body parser to send json data inside body request
+app.use(express.json());
+
 app.use("/api/v1/transactions", transactions);
 
 app.listen(PORT, console.log(`server running on ${PORT}`.yellow.bold));
