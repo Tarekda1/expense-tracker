@@ -9,6 +9,8 @@ const initialState = {
   loading: true
 };
 
+const basePath = "/api/v1/transactions";
+
 // { id: 1, text: 'Flower', amount: -20 },
 // { id: 2, text: 'Salary', amount: 300 },
 // { id: 3, text: 'Book', amount: -10 },
@@ -25,26 +27,53 @@ export const GlobalProvider = ({ children }) => {
   //Actions
   async function getTransactions() {
     try {
-      const res = await axios.get("/api/v1/transactions");
+      const res = await axios.get(basePath);
       dispatch({
         type: "GET_TRANSACTIONS",
         payload: res.data.data
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: "TRANSACTION_ERROR",
+        payload: error.response.data.error
+      });
+    }
   }
 
-  function deleteTransaction(id) {
-    dispatch({
-      type: "DELETE_TRANSACTION",
-      payload: id
-    });
+  async function deleteTransaction(id) {
+    try {
+      await axios.delete(`${basePath}/${id}`);
+      dispatch({
+        type: "DELETE_TRANSACTION",
+        payload: id
+      });
+    } catch (error) {
+      dispatch({
+        type: "TRANSACTION_ERROR",
+        payload: error.response.data.error
+      });
+    }
   }
 
-  function addTransaction(transaction) {
-    dispatch({
-      type: "ADD_TRANSACTION",
-      payload: transaction
-    });
+  async function addTransaction(transaction) {
+    const config = {
+      headers: {
+        "Content-type": "application/json"
+      }
+    };
+
+    try {
+      const response = await axios.post(basePath, transaction, config);
+      dispatch({
+        type: "ADD_TRANSACTION",
+        payload: response.data.data
+      });
+    } catch (error) {
+      dispatch({
+        type: "TRANSACTION_ERROR",
+        payload: error.response.data.error
+      });
+    }
   }
 
   return (
@@ -52,7 +81,10 @@ export const GlobalProvider = ({ children }) => {
       value={{
         transactions: state.transactions,
         deleteTransaction,
-        addTransaction
+        addTransaction,
+        addTransaction,
+        error: state.error,
+        loading: state.loading
       }}
     >
       {children}
