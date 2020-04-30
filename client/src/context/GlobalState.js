@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
-import { axios } from "axios";
+import axios from "axios";
 
 //Initial State
 const initialState = {
@@ -27,12 +27,15 @@ export const GlobalProvider = ({ children }) => {
   //Actions
   async function getTransactions() {
     try {
+      //console.log(axios);
       const res = await axios.get(basePath);
+      //console.log(res);
       dispatch({
         type: "GET_TRANSACTIONS",
         payload: res.data.data
       });
     } catch (error) {
+      console.log(error);
       dispatch({
         type: "TRANSACTION_ERROR",
         payload: error.response.data.error
@@ -82,7 +85,7 @@ export const GlobalProvider = ({ children }) => {
         transactions: state.transactions,
         deleteTransaction,
         addTransaction,
-        addTransaction,
+        getTransactions,
         error: state.error,
         loading: state.loading
       }}

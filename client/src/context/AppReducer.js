@@ -13,6 +13,7 @@ export default (state, { type, payload }) => {
         transactions: [...state.transactions, payload]
       };
     case "GET_TRANSACTIONS":
+      console.log(payload);
       return {
         ...state,
         loading: false,
