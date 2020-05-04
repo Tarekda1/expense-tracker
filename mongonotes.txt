@@ -14,3 +14,25 @@ sudo ufw status
 sudo nano /etc/mongodb.conf
 
 sudo systemctl restart mongodb
+
+
+/working with db
+
+show dbs
+
+//create a db
+use new_database_name
+
+//show collections
+show collections
+
+//get all documents from a new_collection
+db.new_collection.find()
+
+db.createUser(
+  {
+    user: "new_user",
+    pwd: "some_password",
+    roles: [ { role: "readWrite", db: "new_database" } ]
+  }
+)
